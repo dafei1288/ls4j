@@ -1,0 +1,22 @@
+ls4j:
+
+  test1:
+    user: root
+    pass: dafei1288
+    host: 192.168.56.101
+    port: 22
+
+  test2:
+    user: root
+    pass: dafei1288
+    host: localhost
+    port: 1022
+
+  cli:
+    lockhome: true
+    homepath: ~/
+    placeholder: "@~@"
+    dir: ls -l ${ls4j.cli.placeholder} |grep ^d | awk '{print $9}'
+    pwd: pwd ${ls4j.cli.placeholder}
+    mkdir: mkdir -p ${ls4j.cli.placeholder}
+    chartset: GBK
