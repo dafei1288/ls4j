@@ -28,6 +28,11 @@ import java.util.logging.Level;
 
 @Slf4j
 public class SshdService implements  IService{
+    @Override
+    public void mkdir(RemoteHost remoteHost, String remotePath, String charset) throws Exception {
+
+    }
+
     public List<String>  lsFiles(RemoteHost remoteHost , String cli , String charset ) throws IOException, InterruptedException {
         SshClient client = null;
         ClientSession session = null;

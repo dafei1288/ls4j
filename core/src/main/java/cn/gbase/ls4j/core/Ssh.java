@@ -85,6 +85,7 @@ public class Ssh {
         dirStack = new Stack<String>();
     };
 
+
     /**
      *
      * 返回Ssh类实例，用于完成后续SSH操作 <br />
@@ -107,9 +108,11 @@ public class Ssh {
      *
      * */
     public static Ssh getInstance(){
+
         if(ls == null){
             ls = new Ssh();
         }
+        ls.cdHome();
         return ls;
     }
 
@@ -285,6 +288,8 @@ public class Ssh {
      * */
     public String pwd() {
         String path  =this.dirStack.stream().collect(Collectors.joining(PATHSPILTER));
+        String res = path;
+
         if(this.isLockhome()){
             if(path.contains(PARENTPATH)){
                 path = path.replace(PARENTPATH,BLANK);
@@ -295,21 +300,22 @@ public class Ssh {
             }
 
             path = this.home_dir+path;
-        }
-
-        String res = path;
-        try{
-            String cli = this.pwd.replace(this.getPlaceholder(),path);
+            try{
+                String cli = this.pwd.replace(this.getPlaceholder(),path);
 //            System.out.println("===》 "+cli);
-            List<String> al = this.sshdService.lsFiles(this.remoteHost,cli,this.chartset);
+                List<String> al = this.sshdService.lsFiles(this.remoteHost,cli,this.chartset);
 //              res = this.jschService.pwd(remoteHost,path,this.chartset);
 
-            if(al!=null  && al.size()>0){
-                res = al.get(0);
+                if(al!=null  && al.size()>0){
+                    res = al.get(0);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
-        }catch (Exception e){
-            e.printStackTrace();
         }
+
+
+
 //        System.out.println("res ===》 "+res);
         return res;
     }
@@ -343,6 +349,42 @@ public class Ssh {
     }
 
 
+    public Ssh mkdir() throws Exception{
+        return this.mkdir(this.pwd());
+    }
+
+    public Ssh mkdir(String path) throws Exception {
+
+        String res = path;
+
+        if(this.isLockhome()){
+            if(path.contains(PARENTPATH)){
+                path = path.replace(PARENTPATH,BLANK);
+            }
+
+            if(path.contains(CURRENTPATH)){
+                path = path.replace(CURRENTPATH,BLANK);
+            }
+
+            path = this.home_dir+path;
+
+        }
+
+        try{
+            String cli = this.mkdir.replace(this.getPlaceholder(),path);
+//            System.out.println("===》 "+cli);
+            List<String> al = this.sshdService.lsFiles(this.remoteHost,cli,this.chartset);
+//              res = this.jschService.pwd(remoteHost,path,this.chartset);
+
+            if(al!=null  && al.size()>0){
+                res = al.get(0);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return this;
+    }
 
 
 

@@ -14,6 +14,11 @@ import java.util.stream.Stream;
 @Slf4j
 public class JschService  implements  IService{
 
+    public void mkdir(RemoteHost remoteHost, String remotePath, String charset) throws Exception{
+        ChannelSftp channelSftp = ChannelSftpSingleton.getInstance().getChannelSftp(remoteHost);
+        channelSftp.mkdir(remotePath);
+    }
+
     public String pwd(RemoteHost remoteHost, String remotePath, String charset) throws Exception{
         ChannelSftp channelSftp = ChannelSftpSingleton.getInstance().getChannelSftp(remoteHost);
         channelSftp.cd(remotePath);
