@@ -386,7 +386,10 @@ public class Ssh {
         return this;
     }
 
-
+    public Ssh rmdir(String remotepath) throws Exception {
+        this.jschService.rmdir(this.remoteHost,remotepath,this.chartset);
+        return this;
+    }
 
     public Ssh printLs(){
         try {

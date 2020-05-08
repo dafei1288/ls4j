@@ -7,7 +7,24 @@ import cn.gbase.ls4j.core.RemoteHost;
 import java.io.IOException;
 
 public class TestSingle {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception{
+        Ssh.getInstance()
+                .buildRemoteHostIp("localhost")
+                .buildRemoteHostPort(1022)
+                .buildRemoteHostUser("root")
+                .buildRemoteHostPasswd("dafei1288")
+//                .printPwd()
+//                .cd("1")
+//                .printPwd()
+//                .printList()
+//                .cd("11")
+//                .printPwd()
+//                .printList()
+                .printLs()
+                .rmdir("/root/1/11/java");
+    }
+
+    public static void main2(String[] args) throws Exception {
         Ssh ls = Ssh.getInstance()
                 .buildRemoteHostIp("localhost")
                 .buildRemoteHostPort(1022)

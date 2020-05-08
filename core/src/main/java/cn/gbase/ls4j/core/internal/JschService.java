@@ -8,11 +8,52 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
+import java.util.Vector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
 public class JschService  implements  IService{
+
+    public void rmdir(RemoteHost remoteHost, String remotePath, String charset) throws Exception{
+        ChannelSftp channelSftp = ChannelSftpSingleton.getInstance().getChannelSftp(remoteHost);
+
+        this.rmdir(remotePath,channelSftp);
+    }
+
+
+    public void rmdir(String remoteDir , ChannelSftp channelSftp) throws Exception{
+        try{
+            if(isDirectory(remoteDir,channelSftp)){
+                Vector<ChannelSftp.LsEntry> dirList = channelSftp.ls(remoteDir);
+
+                for(ChannelSftp.LsEntry entry : dirList){
+                    if(!(entry.getFilename().equals(".") || entry.getFilename().equals(".."))){
+                        if(entry.getAttrs().isDir()){
+                            rmdir(remoteDir + "/" +  entry.getFilename()  ,channelSftp);
+                        }else{
+                            String filepath = remoteDir + "/" + entry.getFilename();
+//                            System.out.println(filepath);
+                            channelSftp.rm(filepath);
+                        }
+                    }
+                }
+                channelSftp.cd("..");
+                channelSftp.rmdir(remoteDir);
+            }
+        }catch (SftpException e){
+            e.printStackTrace();
+        }
+    }
+
+
+    private boolean isDirectory(String remoteDirectory , ChannelSftp channelSftp) throws SftpException{
+//        System.out.println(remoteDirectory);
+        return channelSftp.stat(remoteDirectory).isDir();
+    }
+
+
+
 
     public void mkdir(RemoteHost remoteHost, String remotePath, String charset) throws Exception{
         ChannelSftp channelSftp = ChannelSftpSingleton.getInstance().getChannelSftp(remoteHost);

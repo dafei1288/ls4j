@@ -29,6 +29,11 @@ import java.util.logging.Level;
 @Slf4j
 public class SshdService implements  IService{
     @Override
+    public void rmdir(RemoteHost remoteHost, String remotePath, String charset) throws Exception {
+
+    }
+
+    @Override
     public void mkdir(RemoteHost remoteHost, String remotePath, String charset) throws Exception {
 
     }
