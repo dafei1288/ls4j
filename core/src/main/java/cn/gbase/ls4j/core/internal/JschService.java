@@ -69,7 +69,7 @@ public class JschService  implements  IService{
 
     public List<String> lsFiles(RemoteHost remoteHost, String remotePath, String charset) throws Exception {
         List<ChannelSftp.LsEntry> all = ChannelSftpSingleton.getInstance().getChannelSftp(remoteHost).ls(remotePath);
-        return  all.stream().map(it->((ChannelSftp.LsEntry) it).getFilename()).filter(it->(!it.equals(".")&&!it.equals(".."))).collect(Collectors.toList());
+        return  all.stream().filter(it->((ChannelSftp.LsEntry) it).getAttrs().isDir()).map(it->((ChannelSftp.LsEntry) it).getFilename()).filter(it->(!it.equals(".")&&!it.equals(".."))).collect(Collectors.toList());
     }
 
     public void  uploadSFTP(RemoteHost remoteHost , String localPath, String remotePath) throws JSchException, IOException {
@@ -173,9 +173,9 @@ public class JschService  implements  IService{
 
         public ChannelSftp getChannelSftp(RemoteHost remoteHost) throws JSchException {
 
-            if (channelSftp != null && !channelSftp.isClosed()) {
-                return channelSftp;
-            }
+//            if (channelSftp != null && !channelSftp.isClosed()) {
+//                return channelSftp;
+//            }
             channelSftp = getChannel(remoteHost);
             return channelSftp;
         }
