@@ -10,6 +10,7 @@
     <modules>
         <module>core</module>
         <module>spring-boot-plugin</module>
+        <module>core-jdk6</module>
     </modules>
     <packaging>pom</packaging>
 
